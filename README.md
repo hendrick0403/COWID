@@ -6,9 +6,8 @@ A Novel Cloud Workflow for Viral and Variant Identification of SARS-CoV-2
 1. Login to [Cancer Genomics Cloud](https://cgc-accounts.sbgenomics.com/auth/login) platform.
 2. Enter your own **Projects**.
 3. On the top left menu, select **Apps** option.
-4. Click **Add app** button on the top right corner.
-5. Select **Create New App**,then click **Create a Workflow** button.
-6. Type the workflow name, then click **Create** button.
-7. Select **Code** to change the layout view.
-8. Replace all appeared default code with our workflow code provided in this page called *COWID.cwl*.
-9. Click **Save and Run** button on the top right corner to make the workflow available in your own project.
+4. Select **Create app** on the top right corner,then select **Workflow** button.
+5. Type the workflow name, then click **Create** button.
+6. Select **Code** to change the layout view.
+7. Replace all appeared default code with our workflow code provided in this page called *COWID.cwl*.
+8. Click **Save and Run** button on the top right corner to make the workflow available in your own project.
