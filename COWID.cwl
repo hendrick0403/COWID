@@ -1,7 +1,6 @@
 {
     "class": "Workflow",
     "cwlVersion": "v1.2",
-    "id": "hendrick.san/simulation/cowid/2",
     "label": "COWID",
     "$namespaces": {
         "sbg": "https://sevenbridges.com"
@@ -11,16 +10,16 @@
             "id": "centrifuge_index_archive",
             "sbg:fileTypes": "TAR, TAR.GZ",
             "type": "File",
-            "label": "Reference index",
+            "label": "TAR index",
             "doc": "The basename of the index for the reference genomes. The basename is the name of any of the index files up to but not including the final .1.cf / etc. centrifuge looks for the specified index first in the current directory, then in the directory specified in the CENTRIFUGE_INDEXES environment variable.",
-            "sbg:x": -518.2447509765625,
-            "sbg:y": 629.2517700195312
+            "sbg:x": -521.8116455078125,
+            "sbg:y": 631.5410766601562
         },
         {
             "id": "input_file",
             "sbg:fileTypes": "FASTA, FASTQ, FA, FQ, FASTQ.GZ, FQ.GZ, FASTQ.BZ2, FQ.BZ2",
             "type": "File[]",
-            "label": "Input reads",
+            "label": "FASTQ reads",
             "doc": "Read sequence in FASTQ or FASTA format. Could be also gzip'ed (extension .gz) or bzip2'ed (extension .bz2). In case of paired-end alignment it is crucial to set metadata 'paired-end' field to 1/2.",
             "sbg:x": -520.5198364257812,
             "sbg:y": 447.8516845703125
@@ -29,10 +28,10 @@
             "id": "reference",
             "sbg:fileTypes": "FASTA",
             "type": "File",
-            "label": "Reference genome",
+            "label": "FASTA reference",
             "doc": "Reference sequence in fasta format.",
-            "sbg:x": -517,
-            "sbg:y": 4.680850982666016
+            "sbg:x": -515.7294311523438,
+            "sbg:y": -2.3527281284332275
         }
     ],
     "outputs": [
@@ -43,10 +42,10 @@
             ],
             "sbg:fileTypes": "FA",
             "type": "File?",
-            "label": "Output genome",
+            "label": "FASTA genome",
             "doc": "Consensus sequence.",
-            "sbg:x": 772.297607421875,
-            "sbg:y": 5.292488098144531
+            "sbg:x": 757.4453125,
+            "sbg:y": 19.554697036743164
         },
         {
             "id": "Centrifuge_report",
@@ -55,10 +54,10 @@
             ],
             "sbg:fileTypes": "TSV",
             "type": "File?",
-            "label": "Centrifuge report",
+            "label": "TSV report",
             "doc": "Centrifuge report.",
-            "sbg:x": 58.226951599121094,
-            "sbg:y": 614.3192138671875
+            "sbg:x": 61.54109191894531,
+            "sbg:y": 610.2705078125
         },
         {
             "id": "out_variants",
@@ -67,7 +66,7 @@
             ],
             "sbg:fileTypes": "VCF, VCF.GZ",
             "type": "File",
-            "label": "VCF output",
+            "label": "VCF variants",
             "doc": "File to which variants should be written.",
             "secondaryFiles": [
                 {
@@ -83,8 +82,8 @@
                     "required": false
                 }
             ],
-            "sbg:x": 548.7730102539062,
-            "sbg:y": 179
+            "sbg:x": 542.1781005859375,
+            "sbg:y": 215.38674926757812
         },
         {
             "id": "aligned_reads",
@@ -93,7 +92,7 @@
             ],
             "sbg:fileTypes": "SAM, BAM, CRAM",
             "type": "File?",
-            "label": "Output alignments",
+            "label": "BAM alignment",
             "doc": "Output SAM/BAM/CRAM file containing aligned reads.",
             "secondaryFiles": [
                 {
@@ -113,8 +112,8 @@
                     "required": false
                 }
             ],
-            "sbg:x": 300,
-            "sbg:y": 448.7320251464844
+            "sbg:x": 294.1781311035156,
+            "sbg:y": 430.53436279296875
         }
     ],
     "steps": [
@@ -135,21 +134,6 @@
             "out": [
                 {
                     "id": "Centrifuge_report"
-                },
-                {
-                    "id": "Classification_result"
-                },
-                {
-                    "id": "un_conc_output"
-                },
-                {
-                    "id": "al_conc_output"
-                },
-                {
-                    "id": "aligned_unpaired_reads_output"
-                },
-                {
-                    "id": "unaligned_unpaired_reads_output"
                 }
             ],
             "run": {
@@ -683,88 +667,6 @@
                             "sbg:inheritMetadataFrom": "#input_file"
                         },
                         "id": "#Centrifuge_report"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            "File"
-                        ],
-                        "label": "Classification result",
-                        "description": "Classification result.",
-                        "sbg:fileTypes": "TXT",
-                        "outputBinding": {
-                            "glob": "*Classification_result.txt",
-                            "sbg:inheritMetadataFrom": "#input_file"
-                        },
-                        "id": "#Classification_result"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            {
-                                "type": "array",
-                                "items": "File"
-                            }
-                        ],
-                        "label": "Pairs that didn't align concordantly",
-                        "description": "Output text file containing pairs that did not align concordantly, when un_conc option is selected.",
-                        "sbg:fileTypes": "TXT",
-                        "outputBinding": {
-                            "glob": "*un_conc*",
-                            "sbg:inheritMetadataFrom": "#input_file"
-                        },
-                        "id": "#un_conc_output"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            {
-                                "type": "array",
-                                "items": "File"
-                            }
-                        ],
-                        "label": "Pairs that aligned concordantly at least once",
-                        "description": "Output text file containing pairs that aligned concordantly at least once, when al_conc option is selected.",
-                        "sbg:fileTypes": "TXT",
-                        "outputBinding": {
-                            "glob": "*al_conc*",
-                            "sbg:inheritMetadataFrom": "#input_file"
-                        },
-                        "id": "#al_conc_output"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            {
-                                "type": "array",
-                                "items": "File"
-                            }
-                        ],
-                        "label": "Unpaired reads that aligned at least once",
-                        "description": "Output text file containing unpaired reads that aligned at least once.",
-                        "sbg:fileTypes": "TXT",
-                        "outputBinding": {
-                            "glob": "*_aligned_unpaired_reads.txt",
-                            "sbg:inheritMetadataFrom": "#input_file"
-                        },
-                        "id": "#aligned_unpaired_reads_output"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            {
-                                "type": "array",
-                                "items": "File"
-                            }
-                        ],
-                        "label": "Unpaired reads that that didn't align",
-                        "description": "Output text file containing unpaired unaligned reads.",
-                        "sbg:fileTypes": "TXT",
-                        "outputBinding": {
-                            "glob": "*unaligned_unpaired_reads.txt",
-                            "sbg:inheritMetadataFrom": "#input_file"
-                        },
-                        "id": "#unaligned_unpaired_reads_output"
                     }
                 ],
                 "requirements": [
@@ -1122,8 +1024,8 @@
                 "sbg:workflowLanguage": "CWL"
             },
             "label": "Centrifuge Classifier",
-            "sbg:x": -193.3857879638672,
-            "sbg:y": 601.8264770507812
+            "sbg:x": -200.27734375,
+            "sbg:y": 611.1882934570312
         },
         {
             "id": "sbg_fasta_indices",
@@ -1136,12 +1038,6 @@
             "out": [
                 {
                     "id": "fasta_reference"
-                },
-                {
-                    "id": "fasta_index"
-                },
-                {
-                    "id": "fasta_dict"
                 }
             ],
             "run": {
@@ -1150,7 +1046,7 @@
                 "$namespaces": {
                     "sbg": "https://sevenbridges.com"
                 },
-                "id": "admin/sbg-public-data/sbg-fasta-indices/21",
+                "id": "admin/sbg-public-data/sbg-fasta-indices/22",
                 "label": "SBG FASTA Indices",
                 "description": "Create indices for FASTA file.\n\n###**Overview**  \n\nTool allows creating FASTA dictionary and index simultaneously which is necessary for running GATK tools. This version of tool for indexing uses SAMtools faidx command (toolkit version 1.9), while for the FASTA dictionary is used CreateFastaDictionary (GATK toolkit version 4.1.0.0).\n\n\n###**Inputs**  \n\n- FASTA file \n\n###**Output**  \n\n- FASTA Reference file\n- FASTA Index file\n- FASTA Dictionary file\n\n\n###**Changes made by Seven Bridges**\n\nCreateFastaDictionary function creates a DICT file describing the contents of the FASTA file. Parameter -UR was added to the command line that sets the UR field to just the Reference file name, instead of the whole path to file. This allows Memoisation feature of the platform to work.",
                 "baseCommand": [
@@ -1208,30 +1104,6 @@
                             ]
                         },
                         "id": "#fasta_reference"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            "File"
-                        ],
-                        "label": "FASTA Index",
-                        "sbg:fileTypes": "FAI",
-                        "outputBinding": {
-                            "glob": "*.fai"
-                        },
-                        "id": "#fasta_index"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            "File"
-                        ],
-                        "label": "FASTA Dictionary",
-                        "sbg:fileTypes": "DICT",
-                        "outputBinding": {
-                            "glob": "*.dict"
-                        },
-                        "id": "#fasta_dict"
                     }
                 ],
                 "requirements": [
@@ -1308,7 +1180,6 @@
                 },
                 "sbg:projectName": "SBG Public data",
                 "sbg:categories": [
-                    "SBGTools",
                     "Indexing"
                 ],
                 "sbg:revisionsInfo": [
@@ -1443,6 +1314,12 @@
                         "sbg:modifiedBy": "admin",
                         "sbg:modifiedOn": 1648035724,
                         "sbg:revisionNotes": "Updated categories"
+                    },
+                    {
+                        "sbg:revision": 22,
+                        "sbg:modifiedBy": "admin",
+                        "sbg:modifiedOn": 1682685128,
+                        "sbg:revisionNotes": "Categories updated"
                     }
                 ],
                 "sbg:license": "Apache License 2.0",
@@ -1450,10 +1327,10 @@
                 "sbg:appVersion": [
                     "sbg:draft-2"
                 ],
-                "sbg:id": "admin/sbg-public-data/sbg-fasta-indices/21",
-                "sbg:revision": 21,
-                "sbg:revisionNotes": "Updated categories",
-                "sbg:modifiedOn": 1648035724,
+                "sbg:id": "admin/sbg-public-data/sbg-fasta-indices/22",
+                "sbg:revision": 22,
+                "sbg:revisionNotes": "Categories updated",
+                "sbg:modifiedOn": 1682685128,
                 "sbg:modifiedBy": "admin",
                 "sbg:createdOn": 1448043983,
                 "sbg:createdBy": "sanja.mijalkovic",
@@ -1462,10 +1339,10 @@
                 "sbg:validationErrors": [],
                 "sbg:contributors": [
                     "admin",
-                    "sanja.mijalkovic",
-                    "djordje_klisic"
+                    "djordje_klisic",
+                    "sanja.mijalkovic"
                 ],
-                "sbg:latestRevision": 21,
+                "sbg:latestRevision": 22,
                 "sbg:publisher": "sbg",
                 "sbg:content_hash": "a21b3ebe8e82b8fd5100676f5de37ea9b35992d0cbbb0c97a62c7e6a8dea4d620",
                 "sbg:workflowLanguage": "CWL"
@@ -1495,15 +1372,6 @@
             "out": [
                 {
                     "id": "out_variants"
-                },
-                {
-                    "id": "out_alignments"
-                },
-                {
-                    "id": "out_graph"
-                },
-                {
-                    "id": "out_assembly_region"
                 }
             ],
             "run": {
@@ -1512,7 +1380,7 @@
                 "$namespaces": {
                     "sbg": "https://sevenbridges.com"
                 },
-                "id": "admin/sbg-public-data/gatk-haplotypecaller-4-2-0-0/5",
+                "id": "admin/sbg-public-data/gatk-haplotypecaller-4-2-0-0/6",
                 "baseCommand": [
                     "/opt/gatk-4.2.0.0/gatk",
                     "--java-options"
@@ -1719,7 +1587,7 @@
                             "prefix": "--assembly-region-out",
                             "shellQuote": false,
                             "position": 4,
-                            "valueFrom": "${\n    if(inputs.assembly_region_out) {\n        var tmp = inputs.assembly_region_out.slice(-4);\n        if(tmp == \".igv\" || tmp == \".IGV\") {\n            return tmp + '.assembly.igv';\n        }\n        else {\n            return inputs.assembly_region_out + '.assembly.igv';\n        }\n    }\n    else {\n        return null;\n    }\n}"
+                            "valueFrom": "${\n    if(inputs.assembly_region_out) {\n        var tmp = inputs.assembly_region_out.slice(-4);\n        if(tmp == \".igv\" || tmp == \".IGV\") {\n            return inputs.assembly_region_out.slice(0, -4) + '.assembly.igv';\n        }\n        else {\n            return inputs.assembly_region_out + '.assembly.igv';\n        }\n    }\n    else {\n        return null;\n    }\n}"
                         },
                         "label": "Assembly region output",
                         "doc": "Name of the IGV file to which assembly region should be written."
@@ -1747,7 +1615,7 @@
                             "prefix": "--bam-output",
                             "shellQuote": false,
                             "position": 4,
-                            "valueFrom": "${\n    if(inputs.bam_output) {\n        var tmp = inputs.bam_output.slice(-4);\n        if(tmp == \".bam\" || tmp == \".BAM\") {\n            return tmp + '.bam';\n        }\n        else {\n            return inputs.bam_output + '.bam';\n        }\n    }\n    else {\n        return null;\n    }\n}"
+                            "valueFrom": "${\n    if(inputs.bam_output) {\n        var tmp = inputs.bam_output.slice(-4);\n        if(tmp == \".bam\" || tmp == \".BAM\") {\n            return inputs.bam_output.slice(0, -4) + '.bam';\n        }\n        else {\n            return inputs.bam_output + '.bam';\n        }\n    }\n    else {\n        return null;\n    }\n}"
                         },
                         "label": "BAM output",
                         "doc": "Name of the file to which assembled haplotypes should be written."
@@ -2141,7 +2009,7 @@
                             "prefix": "--graph-output",
                             "shellQuote": false,
                             "position": 4,
-                            "valueFrom": "${\n    if(inputs.graph_output) {\n        var tmp = inputs.graph_output.slice(-4);\n        if(tmp == \".txt\" || tmp == \".TXT\") {\n            return tmp + '.txt';\n        }\n        else {\n            return inputs.graph_output + '.txt';\n        }\n    }\n    else {\n        return null;\n    }\n}"
+                            "valueFrom": "${\n    if(inputs.graph_output) {\n        var tmp = inputs.graph_output.slice(-4);\n        if(tmp == \".txt\" || tmp == \".TXT\") {\n            return inputs.graph_output.slice(0, -4) + '.txt';\n        }\n        else {\n            return inputs.graph_output + '.txt';\n        }\n    }\n    else {\n        return null;\n    }\n}"
                         },
                         "label": "Graph output",
                         "doc": "Name of the file to which debug assembly graph information should be written."
@@ -3749,49 +3617,6 @@
                             }
                         ],
                         "sbg:fileTypes": "VCF, VCF.GZ"
-                    },
-                    {
-                        "id": "out_alignments",
-                        "doc": "File to which assembled haplotypes should be written.",
-                        "label": "BAM output",
-                        "type": "File?",
-                        "outputBinding": {
-                            "glob": "${\n    if(inputs.bam_output) {\n        return '*.bam';\n    }\n    else {\n        return null;\n    }\n}",
-                            "outputEval": "$(inheritMetadata(self, inputs.in_alignments))"
-                        },
-                        "secondaryFiles": [
-                            {
-                                "pattern": "^.bai",
-                                "required": false
-                            },
-                            {
-                                "pattern": ".md5",
-                                "required": false
-                            }
-                        ],
-                        "sbg:fileTypes": "BAM"
-                    },
-                    {
-                        "id": "out_graph",
-                        "doc": "File to which assembly graph information should be written.",
-                        "label": "Graph output",
-                        "type": "File?",
-                        "outputBinding": {
-                            "glob": "${\n    if(inputs.graph_output) {\n        return '*.txt';\n    }\n    else {\n        return null;\n    }\n}",
-                            "outputEval": "$(inheritMetadata(self, inputs.in_alignments))"
-                        },
-                        "sbg:fileTypes": "TXT"
-                    },
-                    {
-                        "id": "out_assembly_region",
-                        "doc": "Output the assembly region to this IGV formatted file.",
-                        "label": "Assembly region",
-                        "type": "File?",
-                        "outputBinding": {
-                            "glob": "${\n    if(inputs.assembly_region_out) {\n        return '*.assembly.igv';\n    }\n    else {\n        return null;\n    }\n}",
-                            "outputEval": "$(inheritMetadata(self, inputs.in_alignments))"
-                        },
-                        "sbg:fileTypes": "IGV"
                     }
                 ],
                 "doc": "**GATK HaplotypeCaller** calls germline SNPs and indels from input BAM file(s) via local re-assembly of haplotypes [1].\n\n**GATK HaplotypeCaller** is capable of calling SNPs and indels simultaneously via local de-novo assembly of haplotypes in an active region. In other words, whenever the program encounters a region showing signs of variation, it discards the existing mapping information and completely reassembles the reads in that region. This allows the **GATK HaplotypeCaller** to be more accurate when calling regions that are traditionally difficult to call, for example when they contain different types of variants close to each other. It also makes the **GATK HaplotypeCaller** much better at calling indels than position-based callers like UnifiedGenotyper [1].\n\nIn the GVCF workflow used for scalable variant calling in DNA sequence data, **GATK HaplotypeCaller** runs per-sample to generate an intermediate GVCF (not to be used in final analysis), which can then be used in GenotypeGVCFs for joint genotyping of multiple samples in a very efficient way. The GVCF workflow enables rapid incremental processing of samples as they roll off the sequencer, as well as scaling to very large cohort sizes [1].\n\nIn addition, **HaplotypeCaller** is able to handle non-diploid organisms as well as pooled experiment data. Note however that the algorithms used to calculate variant likelihoods are not well suited to extreme allele frequencies (relative to ploidy) so its use is not recommended for somatic (cancer) variant discovery. For that purpose, use **Mutect2** instead [1].\n\nFinally, **GATK HaplotypeCaller** is also able to correctly handle splice junctions that make RNAseq a challenge for most variant callers, on the condition that the input read data has previously been processed according to [GATK RNAseq short variant discovery (SNPs + Indels)](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192?id=4067) [1].\n\n*A list of **all inputs and parameters** with corresponding descriptions can be found at the bottom of this page.*\n\n***Please note that any cloud infrastructure costs resulting from app and pipeline executions, including the use of public apps, are the sole responsibility of you as a user. To avoid excessive costs, please read the app description carefully and set the app parameters and execution settings accordingly.***\n\n### Common Use Cases\n\n- Call variants individually on each sample in GVCF mode\n\n```\n gatk --java-options \"-Xmx4g\" HaplotypeCaller  \\\n   -R Homo_sapiens_assembly38.fasta \\\n   -I input.bam \\\n   -O output.g.vcf.gz \\\n   -ERC GVCF\n```\n\n\n- Call variants individually on each sample in GVCF mode with allele-specific annotations. [Here](https://gatk.broadinstitute.org/hc/en-us/articles/360035890551?id=9622) you can read more details about allele-specific annotation and filtering.\n\n```\ngatk --java-options \"-Xmx4g\" HaplotypeCaller  \\\n   -R Homo_sapiens_assembly38.fasta \\\n   -I input.bam \\\n   -O output.g.vcf.gz \\\n   -ERC GVCF \\\n   -G Standard \\\n   -G AS_Standard\n```\n\n\n- Call variants with bamout to show realigned reads.\n\n```\n gatk --java-options \"-Xmx4g\" HaplotypeCaller  \\\n   -R Homo_sapiens_assembly38.fasta \\\n   -I input.bam \\\n   -O output.vcf.gz \\\n   -bamout bamout.bam\n```\n\n### Changes Introduced by Seven Bridges\n\n* **Include intervals** (`--intervals`) option is divided into **Include intervals file** and **Include intervals string** options.\n* **Exclude intervals** (`--exclude-intervals`) option is divided into **Exclude intervals file** and **Exclude intervals string** options.\n* **VCF output** will be prefixed using the **Output name prefix** parameter. If this value is not set, the output name will be generated based on the **Sample ID** metadata value from **Input alignments**. If the **Sample ID** value is not set, the name will be inherited from the **Input alignments** file name. In case there are multiple files on the **Input alignments** input, the files will be sorted by name and output file name will be generated based on the first file in the sorted file list, following the rules defined in the previous case. \n* The user can specify the output file format using the **Output VCF extension** argument. Otherwise, the output will be in the compressed VCF file format.\n* The following parameters were excluded from the tool wrapper: `--arguments_file`, `--cloud-index-prefetch-buffer`, `--cloud-prefetch-buffer`, `--gatk-config-file`, `--gcs-max-retries`, `--gcs-project-for-requester-pays`, `--help`, `--QUIET`, `--recover-dangling-heads` (deprecated), `--showHidden`, `--tmp-dir`, `--use-jdk-deflater`, `--use-jdk-inflater`, `--verbosity`, `--version`\n\n### Common Issues and Important Notes\n\n*  **Memory per job** (`mem_per_job`) input allows a user to set the desired memory requirement when running a tool or adding it to a workflow. This input should be defined in MB. It is propagated to the Memory requirements part and “-Xmx” parameter of the tool. The default value is 4000 MB.\n* **Memory overhead per job** (`mem_overhead_per_job`) input allows a user to set the desired overhead memory when running a tool or adding it to a workflow. This input should be defined in MB. This amount will be added to the **Memory per job** in the Memory requirements section but it will not be added to the “-Xmx” parameter. The default value is 100 MB. \n* Note: GATK tools that take in mapped read data expect a BAM file as the primary format [2]. More on GATK requirements for mapped sequence data formats can be found [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035890791-SAM-or-BAM-or-CRAM-Mapped-sequence-data-formats).\n* Note: **Alleles**, **Comparison VCF**, **dbSNP**, **Input alignments**, **Population callset** should have corresponding index files in the same folder. \n* Note: **Reference** FASTA file should have corresponding .fai (FASTA index) and .dict (FASTA dictionary) files in the same folder. \n* Note: When working with PCR-free data, be sure to set **PCR indel model** (`--pcr_indel_model`) to NONE [1].\n* Note: When running **Emit ref confidence** ( `--emit-ref-confidence`) in GVCF or in BP_RESOLUTION mode, the confidence threshold is automatically set to 0. This cannot be overridden by the command line. The threshold can be set manually to the desired level when using **GenotypeGVCFs** [1].\n* Note: It is recommended to use a list of intervals to speed up the analysis. See [this document](https://gatk.broadinstitute.org/hc/en-us/articles/360035889551?id=4133) for details [1].\n* Note: **HaplotypeCaller** is able to handle many non-diploid use cases; the desired ploidy can be specified using the `-ploidy` argument. Note however that very high ploidies (such as are encountered in large pooled experiments) may cause performance challenges including excessive slowness [1].\n* Note: These **Read Filters** (`--read-filter`) are automatically applied to the data by the Engine before processing by **HaplotypeCaller** [1]: **NotSecondaryAlignmentReadFilter**, **GoodCigarReadFilter**, **NonZeroReferenceLengthAlignmentReadFilter**, **PassesVendorQualityCheckReadFilter**, **MappedReadFilter**, **MappingQualityAvailableReadFilter**, **NotDuplicateReadFilter**, **MappingQualityReadFilter**, **WellformedReadFilter**\n* Note: If the **Read filter** (`--read-filter`) option is set to \"LibraryReadFilter\", the **Library** (`--library`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"PlatformReadFilter\", the **Platform filter name** (`--platform-filter-name`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"PlatformUnitReadFilter\", the **Black listed lanes** (`--black-listed-lanes`) option must be set to some value. \n* Note: If the **Read filter** (`--read-filter`) option is set to \"ReadGroupBlackListReadFilter\", the **Read group black list** (`--read-group-black-list`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"ReadGroupReadFilter\", the **Keep read group** (`--keep-read-group`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"ReadLengthReadFilter\", the **Max read length** (`--max-read-length`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"ReadNameReadFilter\", the **Read name** (`--read-name`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"ReadStrandFilter\", the **Keep reverse strand only** (`--keep-reverse-strand-only`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"SampleReadFilter\", the **Sample** (`--sample`) option must be set to some value.\n* Note: If the **Read filter** (`--read-filter`) option is set to \"IntervalOverlapReadFilter\", the **Keep intervals** (`--keep-intervals`) option must be set to some value.\n* Note: The following options are valid only if the appropriate **Read filter** (`--read-filter`) is specified: **Ambig filter bases** (`--ambig-filter-bases`), **Ambig filter frac** (`--ambig-filter-frac`), **Max fragment length** (`--max-fragment-length`), **Min fragment length** (`--min-fragment-length`), **Keep intervals** (`--keep-intervals`), **Library** (`--library`), **Maximum mapping quality** (`--maximum-mapping-quality`), **Minimum mapping quality** (`--minimum-mapping-quality`),  **Mate too distant length** (`--mate-too-distant-length`), **Do not require soft clips** (`--dont-require-soft-clips-both-ends`), **Filter too short** (`--filter-too-short`), **Platform filter name** (`--platform-filter-name`), **Black listed lanes** (`--black-listed-lanes`), **Read group black list** (`--read-group-black-list`), **Keep read group** (`--keep-read-group`), **Max read length** (`--max-read-length`), **Min read length** (`--min-read-length`), **Read name** (`--read-name`), **Keep reverse strand only** (`--keep-reverse-strand-only`), **Sample** (`--sample`), **Invert soft clip ratio filter** (`--invert-soft-clip-ratio-filter`), **Soft clipped leading trailing ratio** (`--soft-clipped-leading-trailing-ratio`), **Soft clipped ratio threshold** (`--soft-clipped-ratio-threshold`) . See the description of each parameter for information on the associated **Read filter**.\n* Note: Allele-specific annotations are not yet supported in the VCF mode.\n* Note: The wrapper has not been tested for the SAM file type on the **Input alignments** input port.\n* Note: DRAGEN-GATK features have not been tested. Once the full DRAGEN-GATK pipeline is released, parameters related to DRAGEN-GATK mode will be tested. \n\n### Performance Benchmarking\n\nBelow is a table describing the runtimes and task costs for a couple of samples with different file sizes.\n\n| Experiment type |  Input size | Paired-end | # of reads | Read length | Duration | Cost (on-demand) | AWS instance type |\n|:--------------:|:------------:|:--------:|:-------:|:---------:|:----------:|:------:|:------:|:------:|\n|     RNA-Seq     | 2.5 GB |     Yes    |     16M     |     101     |   52min   | 0.47$ | c4.2xlarge |\n|     RNA-Seq     | 7.5 GB |     Yes    |     50M     |     101     |   1h46min   | 0.95$ | c4.2xlarge |\n|     RNA-Seq     | 12.5 GB |     Yes    |     82M    |     101     |  2h40min  | 1.43$ | c4.2xlarge |\n|     RNA-Seq     | 24.5 GB |     Yes    |     164M    |     101     |  4h55min  | 2.64$ | c4.2xlarge |\n\n*Cost can be significantly reduced by using **spot instances**. Visit the [knowledge center](https://docs.sevenbridges.com/docs/about-spot-instances) for more details.*\n\n###Portability\n\n**GATK HaplotypeCaller** is tested with cwltool version: \"3.0.20201203173111\"\n\n### References\n[1] [GATK HaplotypeCaller](https://gatk.broadinstitute.org/hc/en-us/articles/360056969012-HaplotypeCaller)\n\n[2] [GATK Mapped sequence data formats](https://gatk.broadinstitute.org/hc/en-us/articles/360035890791-SAM-or-BAM-or-CRAM-Mapped-sequence-data-formats)",
@@ -3905,6 +3730,12 @@
                         "sbg:modifiedBy": "admin",
                         "sbg:modifiedOn": 1648047573,
                         "sbg:revisionNotes": "categories"
+                    },
+                    {
+                        "sbg:revision": 6,
+                        "sbg:modifiedBy": "admin",
+                        "sbg:modifiedOn": 1681122217,
+                        "sbg:revisionNotes": "JS naming for assembly_region_out, bam_output and graph_output⁩"
                     }
                 ],
                 "sbg:toolAuthor": "Broad Institute",
@@ -3914,10 +3745,10 @@
                 "sbg:appVersion": [
                     "v1.2"
                 ],
-                "sbg:id": "admin/sbg-public-data/gatk-haplotypecaller-4-2-0-0/5",
-                "sbg:revision": 5,
-                "sbg:revisionNotes": "categories",
-                "sbg:modifiedOn": 1648047573,
+                "sbg:id": "admin/sbg-public-data/gatk-haplotypecaller-4-2-0-0/6",
+                "sbg:revision": 6,
+                "sbg:revisionNotes": "JS naming for assembly_region_out, bam_output and graph_output⁩",
+                "sbg:modifiedOn": 1681122217,
                 "sbg:modifiedBy": "admin",
                 "sbg:createdOn": 1634729387,
                 "sbg:createdBy": "admin",
@@ -3927,12 +3758,12 @@
                 "sbg:contributors": [
                     "admin"
                 ],
-                "sbg:latestRevision": 5,
+                "sbg:latestRevision": 6,
                 "sbg:publisher": "sbg",
-                "sbg:content_hash": "ad203c311e5a98de23da72909b9e6a0e7b6b065952d7c42cb94f51cf3cb04fbd5",
+                "sbg:content_hash": "a62178128744f3c6a8ba6b4d259c653fa28a09eeafc1f489321b994e1bb064473",
                 "sbg:workflowLanguage": "CWL"
             },
-            "label": "GATK HaplotypeCaller",
+            "label": "HaplotypeCaller",
             "sbg:x": 298.0980529785156,
             "sbg:y": 217.3660125732422
         },
@@ -3951,9 +3782,6 @@
             "out": [
                 {
                     "id": "output_file"
-                },
-                {
-                    "id": "chain_file"
                 }
             ],
             "run": {
@@ -4236,28 +4064,6 @@
                             }
                         },
                         "id": "#output_file"
-                    },
-                    {
-                        "type": [
-                            "null",
-                            "File"
-                        ],
-                        "label": "Chain file",
-                        "description": "Chain file.",
-                        "sbg:fileTypes": "CHAIN",
-                        "outputBinding": {
-                            "glob": {
-                                "class": "Expression",
-                                "engine": "#cwl-js-engine",
-                                "script": "{\n    return $job.inputs.chain\n}"
-                            },
-                            "outputEval": {
-                                "class": "Expression",
-                                "engine": "#cwl-js-engine",
-                                "script": "{\n    var setMetadata = function(file, metadata) {\n    if (!('metadata' in file)) {\n        file['metadata'] = {}\n    }\n    for (var key in metadata) {\n        file['metadata'][key] = metadata[key];\n    }\n    return file\n    };\n\n    var inheritMetadata = function(o1, o2) {\n        var commonMetadata = {};\n        if (!o2) {\n            return o1;\n        };\n        if (!Array.isArray(o2)) {\n            o2 = [o2]\n        }\n        for (var i = 0; i < o2.length; i++) {\n            var example = o2[i]['metadata'];\n            for (var key in example) {\n                if (i == 0)\n                    commonMetadata[key] = example[key];\n                else {\n                    if (!(commonMetadata[key] == example[key])) {\n                        delete commonMetadata[key]\n                    }\n                }\n            }\n            for (var key in commonMetadata) {\n                if (!(key in example)) {\n                    delete commonMetadata[key]\n                }\n            }\n        }\n        if (!Array.isArray(o1)) {\n            o1 = setMetadata(o1, commonMetadata)\n            if (o1.secondaryFiles) {\n                o1.secondaryFiles = inheritMetadata(o1.secondaryFiles, o2)\n            }\n        } else {\n            for (var i = 0; i < o1.length; i++) {\n                o1[i] = setMetadata(o1[i], commonMetadata)\n                if (o1[i].secondaryFiles) {\n                    o1[i].secondaryFiles = inheritMetadata(o1[i].secondaryFiles, o2)\n                }\n            }\n        }\n        return o1;\n    };\n    \n    if($job.inputs.input_file_compressed){\n        temp = [].concat($self)\n        for (i in temp){\n            temp[i] = inheritMetadata(temp[i], $job.inputs.input_file_compressed)\n        }\n    }\n    else{\n        temp = [].concat($self)\n        for (i in temp){\n            temp[i] = inheritMetadata(temp[i], $job.inputs.input_file_uncompressed)\n        }\n    }\n    return temp\n \n}"
-                            }
-                        },
-                        "id": "#chain_file"
                     }
                 ],
                 "requirements": [
@@ -4460,9 +4266,6 @@
             "out": [
                 {
                     "id": "aligned_reads"
-                },
-                {
-                    "id": "dups_metrics"
                 }
             ],
             "run": {
@@ -5163,16 +4966,6 @@
                             }
                         ],
                         "sbg:fileTypes": "SAM, BAM, CRAM"
-                    },
-                    {
-                        "id": "dups_metrics",
-                        "doc": "Metrics file for Biobambam2 Mark Duplicates.",
-                        "label": "Sormadup metrics",
-                        "type": "File?",
-                        "outputBinding": {
-                            "glob": "*.sormadup_metrics.log"
-                        },
-                        "sbg:fileTypes": "LOG"
                     }
                 ],
                 "doc": "BWA-MEM is an algorithm designed for aligning sequence reads onto a large reference genome. BWA-MEM is implemented as a component of BWA. The algorithm can automatically choose between performing end-to-end and local alignments. BWA-MEM is capable of outputting multiple alignments, and finding chimeric reads. It can be applied to a wide range of read lengths, from 70 bp to several megabases. \n\n*A list of **all inputs and parameters** with corresponding descriptions can be found at the bottom of this page.*\n\n***Please note that any cloud infrastructure costs resulting from app and pipeline executions, including the use of public apps, are the sole responsibility of you as a user. To avoid excessive costs, please read the app description carefully and set the app parameters and execution settings accordingly.***\n\n\n## Common Use Cases\nIn order to enable additional fast processing of aligned reads, the **Biobambam2 sortmadup** (2.0.87) tool is embedded together into the same package with BWA-MEM (0.7.17).\n\nIn order to enable additional fast processing of aligned reads, **Biobambam2** (2.0.87) is embedded together with the BWA 0.7.17 toolkit into **BWA-MEM Bundle**.  Two tools are used (**bamsort** and **bamsormadup**) to allow the selection of three output formats (SAM, BAM, or CRAM), different modes of sorting (queryname/coordinate sorting), and marking/removing duplicates that can arise during sample preparation e.g. library construction using PCR. This is done by setting the **Output format** and **PCR duplicate detection** parameters.\n- Additional notes:\n    - The default **Output format** is coordinate sorted BAM (option **BAM**).\n    - SAM and BAM options are query name sorted, while CRAM format is not advisable for data sorted by query name.\n    - Coordinate Sorted BAM file in all options and CRAM Coordinate sorted output with Marked Duplicates come with their accompanying index files. The generated index name will be the same as the output alignments file, with the BAM.BAI or CRAM.CRAI extension. However, when selecting the CRAM Coordinate sorted and CRAM Coordinate sorted output with Removed Duplicates, the generated files will not have the accompanying index files. This is a result of the usage of different Biobambam2 tools - **bamsort** does not have the ability to write CRAI files (only supports outputting BAI index files), while **bamsormadup** can write CRAI files.\n    - Passing data from BWA-MEM to Biobambam2 tools has been done through  Linux piping which saves processing times (up to an hour of the execution time for a whole-genome sample) of reading and writing of aligned reads into the hard drive. \n    - **BWA-MEM Bundle 0.7.17 CWL1.2** first needs to construct the FM-index  (Full-text index in Minute space) for the reference genome using the **BWA INDEX 0.7.17 CWL1.2** tool. The two BWA versions are compatible.\n\n### Changes Introduced by Seven Bridges\n\n- **Aligned SAM/BAM/CRAM** file will be prefixed using the **Output SAM/BAM/CRAM file name** parameter. In case **Output SAM/BAM/CRAM file name** is not provided, the output prefix will be the same as the **Sample ID** metadata field from the file if the **Sample ID** metadata field exists. Otherwise, the output prefix will be inferred from the **Input reads** file names.\n-  The **Platform** metadata field for the output alignments will be automatically set to \"Illumina\" unless it is present in **Input reads** metadata, or given through **Read group header** or **Platform** input parameters. This will prevent possible errors in downstream analysis using the GATK toolkit.\n- If the **Read group ID** parameter is not defined, by default it will be set to ‘1’. If the tool is scattered within a workflow it will assign the **Read Group ID** according to the order of the scattered folders. This ensures a unique **Read Group ID** when processing multi-read group input data from one sample.\n\n### Common Issues and Important Notes \n \n- For input reads FASTQ files of total size less than 10 GB we suggest using the default setting of 15GB for the **Total memory** parameter. For larger files, we suggest using 58 GB of memory and 32 CPU cores.\n- When the desired output is a CRAM file without deduplication of PCR duplicates, it is necessary to provide the FASTA Index file (FAI) as input.\n- Human reference genome version 38 comes with ALT contigs, a collection of diverged alleles present in some humans but not in others. Making effective use of these contigs will help reduce mapping artifacts. However, to facilitate mapping these ALT contigs to the primary assembly, GRC decided to add to each contig long flanking sequences almost identical to the primary assembly. As a result, a naive mapping against GRCh38+ALT will lead to many mapQ-zero mappings in these flanking regions. Please use post-processing steps to fix these alignments or implement [steps](https://sourceforge.net/p/bio-bwa/mailman/message/32845712/) described by the author of the BWA toolkit.  \n- Inputs **Read group header** and **Insert string to header** need to be given in the correct format - under single-quotes.\n- BWA-MEM is not a splice aware aligner, so it is not the appropriate tool for mapping RNAseq to the genome. For RNAseq reads **Bowtie2 Aligner** and **STAR** are recommended tools. \n- Input paired reads need to have identical read names - if not, the tool will throw a ``[mem_sam_pe] paired reads have different names`` error.\n\n### Limitations\n\n- This app was tested only on human data (WES and WGS), aligning to both hg38 and hg19 reference genome assemblies.\n\n\n### Performance Benchmarking\n\nBelow is a table describing runtimes and task costs on on-demand instances for a set of samples with different file sizes:\n\n| Input reads       | Size [GB] | Output format | Instance (AWS)           | Duration  | Cost   | Threads |\n|-------------------|-----------|---------------|--------------------------|-----------|--------|---------|\n| HG001-NA12878-30x | 2 x 23.8  | SAM           | c5.9xlarge (36CPU, 72GB) | 5h 12min  | $7.82  | 36      |\n| HG001-NA12878-30x | 2 x 23.8  | BAM           | c5.9xlarge (36CPU, 72GB) | 5h 16min  | $8.06  | 36      |\n| HG002-NA24385-50x | 2 x 66.4  | SAM           | c5.9xlarge (36CPU, 72GB) | 8h 33min  | $13.08 | 36      |\n\n\n*Cost can be significantly reduced by using **spot instances**. Visit the [Knowledge Center](https://docs.sevenbridges.com/docs/about-spot-instances) for more details.*\n\n### Portability\n\n**BWA MEM Bundle** was tested with cwltool version 3.0.20201203173111. The '-input_reads' and  '-reference_index_tar' inputs were provided in the job.yaml/job.json file and used for testing.",
@@ -5334,7 +5127,7 @@
                 "sbg:content_hash": "a7e4a5ee4873c491fb76818a0c61f0c2f24f5723335fe79599c29d8896f71f133",
                 "sbg:workflowLanguage": "CWL"
             },
-            "label": "BWA MEM Bundle",
+            "label": "BWA MEM",
             "sbg:x": 61.430381774902344,
             "sbg:y": 431.68353271484375
         },
@@ -5610,17 +5403,30 @@
             "sbg:modifiedBy": "hendrick.san",
             "sbg:modifiedOn": 1660985818,
             "sbg:revisionNotes": "output as VCF"
+        },
+        {
+            "sbg:revision": 3,
+            "sbg:modifiedBy": "hendrick.san",
+            "sbg:modifiedOn": 1682950032,
+            "sbg:revisionNotes": "simplified"
+        },
+        {
+            "sbg:revision": 4,
+            "sbg:modifiedBy": "hendrick.san",
+            "sbg:modifiedOn": 1682953164,
+            "sbg:revisionNotes": "I/O w/ file format"
         }
     ],
-    "sbg:image_url": "https://cgc.sbgenomics.com/ns/brood/images/hendrick.san/simulation/cowid/2.png",
+    "sbg:image_url": "https://cgc.sbgenomics.com/ns/brood/images/hendrick.san/simulation/cowid/4.png",
     "sbg:appVersion": [
         "v1.2",
         "sbg:draft-2"
     ],
-    "sbg:id": "hendrick.san/simulation/cowid/2",
-    "sbg:revision": 2,
-    "sbg:revisionNotes": "output as VCF",
-    "sbg:modifiedOn": 1660985818,
+    "id": "https://cgc-api.sbgenomics.com/v2/apps/hendrick.san/simulation/cowid/4/raw/",
+    "sbg:id": "hendrick.san/simulation/cowid/4",
+    "sbg:revision": 4,
+    "sbg:revisionNotes": "I/O w/ file format",
+    "sbg:modifiedOn": 1682953164,
     "sbg:modifiedBy": "hendrick.san",
     "sbg:createdOn": 1655774064,
     "sbg:createdBy": "hendrick.san",
@@ -5630,8 +5436,8 @@
     "sbg:contributors": [
         "hendrick.san"
     ],
-    "sbg:latestRevision": 2,
+    "sbg:latestRevision": 4,
     "sbg:publisher": "sbg",
-    "sbg:content_hash": "a9c96f13b0c6275a9fb835a62a64018e87f306e3bd03e799015d62044ea05540f",
+    "sbg:content_hash": "a7337875477bdda228f8cbb4b847bdcb1e40296135da11e7ed7e906811634a0f2",
     "sbg:workflowLanguage": "CWL"
 }
