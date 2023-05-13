@@ -11,3 +11,8 @@ A Novel Cloud Workflow for Viral and Variant Identification of SARS-CoV-2
 6. Select **Code** to change the layout view.
 7. Replace all appeared default code with our workflow code provided in this page called *COWID.cwl*.
 8. Click **Save and Run** button on the top right corner to make the workflow available in your own project.
+
+<br/>
+Please take a look this following short video tutorial on how using our workflow.
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/P9PzBuPhTv4/0.jpg)](https://www.youtube.com/watch?v=P9PzBuPhTv4)
