@@ -16,3 +16,7 @@ A Novel Cloud Workflow for Viral and Variant Identification of SARS-CoV-2
 Please take a look this following short video tutorial on how using our workflow.
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/P9PzBuPhTv4/0.jpg)](https://www.youtube.com/watch?v=P9PzBuPhTv4)
+
+## Please Cite
+Lim, H. G. M., Fann, Y. C., & Lee, Y. C. G. (2023). COWID: an efficient cloud-based genomics workflow for scalable identification of SARS-COV-2. *Briefings in Bioinformatics*, https://doi.org/10.1093/bib/bbad280.
+
